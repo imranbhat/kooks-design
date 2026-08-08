@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kooks — Design Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --red:#C9372C; --red-deep:#A82A20; --red-dark:#7E1F17; --red-soft:#FBEBE7; --red-mist:#F6DDD7;
+  --cream:#FAF5EC; --cream-deep:#F3EBDD; --paper:#FFFFFF;
+  --ink:#27201D; --ink-soft:#7A6E67; --ink-faint:#B4A89F;
+  --green:#2E7D4F; --green-soft:#E4F1E8;
+  --gold:#E5A33C; --gold-soft:#FBF1DE;
+  --line:#EBE2D4; --line-strong:#DDD2C0;
+  --disp:"Bricolage Grotesque", sans-serif;
+  --body:"Instrument Sans", sans-serif;
+  --serif:"Instrument Serif", serif;
+  --sh-card:0 1px 2px rgba(39,32,29,.05),0 6px 18px -6px rgba(39,32,29,.09);
+  --sh-pop:0 2px 6px rgba(39,32,29,.08),0 22px 44px -14px rgba(126,31,23,.22);
+  --r-lg:22px; --r-md:16px; --r-sm:11px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--body); color:var(--ink); background:var(--cream);
+  background-image:
+    radial-gradient(1200px 500px at 85% -10%, rgba(201,55,44,.055), transparent 60%),
+    radial-gradient(900px 420px at -10% 30%, rgba(229,163,60,.06), transparent 55%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.028'/%3E%3C/svg%3E");
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--red);color:#fff}
+button{font-family:inherit;border:none;background:none;cursor:pointer;color:inherit}
+input{font-family:inherit}
+
+/* ============ PAGE CHROME ============ */
+.topbar{
+  position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:26px;
+  padding:14px 34px;background:rgba(250,245,236,.88);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.lockup{display:flex;align-items:center;gap:12px}
+.lockup .mark{width:40px;height:40px}
+.lockup .wm{font-family:var(--disp);font-weight:750;font-size:21px;letter-spacing:-.02em}
+.lockup .tg{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--red);margin-left:2px}
+.navtabs{display:flex;gap:6px;margin-left:auto}
+.navtab{
+  font-size:13.5px;font-weight:600;padding:9px 18px;border-radius:999px;color:var(--ink-soft);
+  transition:.18s;
+}
+.navtab:hover{color:var(--ink)}
+.navtab.on{background:var(--ink);color:var(--cream)}
+.vtag{font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--ink-faint);text-transform:uppercase}
+
+.section{display:none;max-width:1340px;margin:0 auto;padding:52px 34px 110px}
+.section.on{display:block}
+.sec-head{margin-bottom:38px;max-width:720px}
+.sec-kick{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:10px}
+.sec-title{font-family:var(--disp);font-weight:700;font-size:clamp(30px,4vw,44px);letter-spacing:-.03em;line-height:1.04}
+.sec-title em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--red)}
+.sec-sub{margin-top:14px;font-size:15.5px;line-height:1.6;color:var(--ink-soft)}
+
+/* ============ BRAND SECTION ============ */
+.brand-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:26px;align-items:stretch}
+.bcard{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-lg);padding:30px;box-shadow:var(--sh-card)}
+.bcard h3{font-family:var(--disp);font-weight:650;font-size:17px;letter-spacing:-.01em;margin-bottom:18px}
+.hero-mark{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;
+  background:linear-gradient(160deg,var(--red) 0%,var(--red-deep) 100%);
+  border-radius:var(--r-lg);padding:52px 30px;position:relative;overflow:hidden;
+}
+.hero-mark::after{content:"";position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E")}
+.hero-mark .mark{width:150px;height:150px;filter:drop-shadow(0 14px 28px rgba(0,0,0,.22));position:relative;z-index:1}
+.hero-word{position:relative;z-index:1;text-align:center}
+.hero-word .w{font-family:var(--disp);font-weight:800;font-size:44px;color:#fff;letter-spacing:.01em}
+.hero-word .t{font-family:var(--serif);font-style:italic;font-size:21px;color:#FFD9CF;margin-top:2px}
+.swatches{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.sw{border-radius:var(--r-sm);padding:14px 12px 12px;border:1px solid rgba(0,0,0,.05);min-height:88px;display:flex;flex-direction:column;justify-content:flex-end}
+.sw b{font-size:12.5px;font-weight:650}.sw span{font-size:11px;opacity:.75}
+.type-spec .row{display:flex;align-items:baseline;gap:18px;padding:13px 0;border-bottom:1px dashed var(--line)}
+.type-spec .row:last-child{border:none}
+.type-spec .lbl{font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-faint);width:86px;flex:none}
+.princ{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+.princ .p{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md);padding:20px;box-shadow:var(--sh-card)}
+.princ .p .ic{width:34px;height:34px;border-radius:10px;background:var(--red-soft);color:var(--red);display:grid;place-items:center;margin-bottom:12px}
+.princ .p b{font-size:14px;display:block;margin-bottom:5px}
+.princ .p span{font-size:13px;color:var(--ink-soft);line-height:1.5}
+
+/* ============ PROTO LAYOUT ============ */
+.proto{display:grid;grid-template-columns:auto 1fr;gap:54px;align-items:start}
+.screen-index{position:sticky;top:96px}
+.si-group{margin-bottom:22px}
+.si-group h4{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:9px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;max-width:430px}
+.chip{
+  font-size:13px;font-weight:600;padding:8px 15px;border-radius:999px;background:var(--paper);
+  border:1px solid var(--line-strong);color:var(--ink-soft);transition:.16s;
+}
+.chip:hover{border-color:var(--red);color:var(--red)}
+.chip.on{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 6px 14px -6px rgba(201,55,44,.5)}
+.flow-note{margin-top:26px;padding:18px 20px;border-left:3px solid var(--red);background:var(--paper);border-radius:0 var(--r-md) var(--r-md) 0;max-width:430px;box-shadow:var(--sh-card)}
+.flow-note b{font-size:13px;display:block;margin-bottom:6px}
+.flow-note p{font-size:13px;color:var(--ink-soft);line-height:1.6}
+
+/* ============ PHONE FRAME ============ */
+.phone{
+  width:394px;height:822px;background:#161210;border-radius:54px;padding:11px;flex:none;
+  box-shadow:0 2px 4px rgba(0,0,0,.14),0 40px 80px -24px rgba(39,32,29,.4),inset 0 0 0 2px #34302c;
+  position:relative;margin:0 auto;
+}
+.phone .viewport{width:100%;height:100%;border-radius:44px;overflow:hidden;background:var(--cream);position:relative}
+.notch{position:absolute;top:22px;left:50%;transform:translateX(-50%);width:118px;height:33px;background:#161210;border-radius:20px;z-index:40}
+.statusbar{position:absolute;top:0;left:0;right:0;height:54px;display:flex;align-items:center;justify-content:space-between;padding:20px 30px 0;z-index:35;font-size:14.5px;font-weight:600;pointer-events:none}
+.statusbar .sig{display:flex;gap:5px;align-items:center}
+.homebar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:130px;height:5px;border-radius:3px;background:rgba(0,0,0,.28);z-index:40;pointer-events:none}
+
+/* screens */
+.scr{position:absolute;inset:0;display:none;flex-direction:column;background:var(--cream)}
+.scr.on{display:flex;animation:scrIn .3s cubic-bezier(.2,.8,.25,1)}
+@keyframes scrIn{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+.scr-body{flex:1;overflow-y:auto;scrollbar-width:none;padding-top:58px}
+.scr-body::-webkit-scrollbar{display:none}
+
+/* app components */
+.app-pad{padding-left:22px;padding-right:22px}
+.greet{padding-top:16px}
+.greet .hi{font-size:14px;color:var(--ink-soft);font-weight:500}
+.greet h1{font-family:var(--disp);font-weight:750;font-size:29px;letter-spacing:-.025em;line-height:1.08;margin-top:4px}
+.greet h1 em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--red)}
+.pickup-strip{
+  margin-top:16px;display:flex;align-items:center;gap:10px;background:var(--red-soft);
+  border:1px solid var(--red-mist);color:var(--red-deep);border-radius:var(--r-sm);
+  padding:10px 14px;font-size:12.5px;font-weight:600;
+}
+.city-lbl{display:flex;align-items:center;gap:10px;margin:24px 0 12px;font-size:12px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-faint)}
+.city-lbl::after{content:"";flex:1;height:1px;background:var(--line)}
+.store-card{
+  width:100%;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md);
+  padding:16px;display:flex;gap:14px;align-items:center;margin-bottom:11px;box-shadow:var(--sh-card);transition:.16s;
+}
+.store-card:hover{border-color:var(--red);transform:translateY(-1px)}
+.store-card .pin{width:46px;height:46px;flex:none;border-radius:14px;background:linear-gradient(150deg,var(--red),var(--red-deep));display:grid;place-items:center}
+.store-card .pin svg{width:24px;height:24px}
+.store-card b{font-size:15px;display:block;letter-spacing:-.01em}
+.store-card .meta{font-size:12.5px;color:var(--ink-soft);margin-top:3px;display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.dot-open{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
+.dot-shut{width:7px;height:7px;border-radius:50%;background:var(--ink-faint)}
+.store-card .go{margin-left:auto;color:var(--ink-faint)}
+.km{font-weight:600;color:var(--ink)}
+
+.appbar{display:flex;align-items:center;gap:12px;padding:14px 22px 10px}
+.backbtn{width:38px;height:38px;border-radius:12px;background:var(--paper);border:1px solid var(--line);display:grid;place-items:center;flex:none;transition:.15s}
+.backbtn:hover{border-color:var(--red);color:var(--red)}
+.appbar .ttl{font-family:var(--disp);font-weight:650;font-size:18px;letter-spacing:-.015em}
+.appbar .sub{font-size:12px;color:var(--ink-soft);margin-top:1px;display:flex;align-items:center;gap:5px}
+.cartbtn{margin-left:auto;position:relative;width:38px;height:38px;border-radius:12px;background:var(--ink);color:var(--cream);display:grid;place-items:center}
+.cartbtn .n{position:absolute;top:-6px;right:-6px;min-width:19px;height:19px;border-radius:10px;background:var(--red);color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center;padding:0 5px;border:2px solid var(--cream)}
+.search{margin:8px 22px 2px;display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:11px 14px;color:var(--ink-faint);font-size:14px}
+.cattabs{display:flex;gap:8px;overflow-x:auto;padding:14px 22px 4px;scrollbar-width:none}
+.cattabs::-webkit-scrollbar{display:none}
+.cattab{flex:none;font-size:13px;font-weight:600;padding:8px 15px;border-radius:999px;background:var(--paper);border:1px solid var(--line-strong);color:var(--ink-soft);transition:.15s}
+.cattab.on{background:var(--ink);border-color:var(--ink);color:var(--cream)}
+.menu-list{padding:12px 22px 120px;display:flex;flex-direction:column;gap:12px}
+.mi{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md);padding:13px;display:flex;gap:13px;box-shadow:var(--sh-card);text-align:left;width:100%;transition:.16s}
+.mi:hover{border-color:var(--red)}
+.mi .ph{width:86px;height:86px;flex:none;border-radius:13px;display:grid;place-items:center;position:relative;overflow:hidden}
+.ph-a{background:linear-gradient(150deg,#F7E3CE,#F0CFA8);color:#B4622A}
+.ph-b{background:linear-gradient(150deg,var(--red-mist),#F2C3B4);color:var(--red-deep)}
+.ph-c{background:linear-gradient(150deg,#E9EFDF,#D6E4C4);color:#5C7A3C}
+.ph-d{background:linear-gradient(150deg,#F4E9D2,#EAD7A8);color:#9C7A26}
+.mi .ph svg{width:40px;height:40px}
+.mi .inf{flex:1;min-width:0;display:flex;flex-direction:column}
+.vdot{width:14px;height:14px;border:1.6px solid var(--green);border-radius:4px;display:inline-grid;place-items:center;flex:none}
+.vdot::after{content:"";width:6px;height:6px;border-radius:50%;background:var(--green)}
+.ndot{width:14px;height:14px;border:1.6px solid var(--red);border-radius:4px;display:inline-grid;place-items:center;flex:none}
+.ndot::after{content:"";width:6px;height:6px;border-radius:50%;background:var(--red)}
+.mi .nm{font-size:14.5px;font-weight:650;letter-spacing:-.01em;display:flex;align-items:center;gap:7px}
+.mi .ds{font-size:12px;color:var(--ink-soft);line-height:1.45;margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mi .rw{margin-top:auto;padding-top:8px;display:flex;align-items:center}
+.mi .pr{font-size:14.5px;font-weight:700}
+.mi .pr small{font-size:11px;font-weight:500;color:var(--ink-faint);margin-right:2px}
+.addmini{margin-left:auto;font-size:12.5px;font-weight:700;color:var(--red);background:var(--red-soft);border:1px solid var(--red-mist);padding:7px 16px;border-radius:10px;transition:.15s}
+.addmini:hover{background:var(--red);color:#fff}
+.soldout{opacity:.52}
+.soldout .addmini{background:var(--cream-deep);border-color:var(--line);color:var(--ink-faint)}
+.tabbar{
+  position:absolute;bottom:0;left:0;right:0;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);
+  border-top:1px solid var(--line);display:flex;padding:10px 26px 22px;z-index:30;
+}
+.tb{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10.5px;font-weight:600;color:var(--ink-faint);transition:.15s}
+.tb.on{color:var(--red)}
+.tb svg{width:23px;height:23px}
+
+/* item detail */
+.item-hero{height:250px;display:grid;place-items:center;position:relative;background:linear-gradient(160deg,#F7E3CE,#EFC9A0)}
+.item-hero svg{width:110px;height:110px;color:#B4622A;filter:drop-shadow(0 10px 18px rgba(180,98,42,.3))}
+.item-hero .backbtn{position:absolute;top:64px;left:22px;z-index:5}
+.sheet{background:var(--paper);border-radius:26px 26px 0 0;margin-top:-24px;position:relative;z-index:4;padding:24px 22px 130px;min-height:400px}
+.sheet h2{font-family:var(--disp);font-weight:700;font-size:23px;letter-spacing:-.02em;display:flex;align-items:center;gap:9px}
+.sheet .desc{font-size:13.5px;color:var(--ink-soft);line-height:1.6;margin-top:8px}
+.optlbl{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin:22px 0 10px}
+.opt{width:100%;display:flex;align-items:center;gap:12px;padding:13px 15px;border:1.5px solid var(--line);border-radius:13px;margin-bottom:9px;text-align:left;transition:.15s;background:var(--paper)}
+.opt .radio{width:19px;height:19px;border-radius:50%;border:2px solid var(--line-strong);display:grid;place-items:center;flex:none;transition:.15s}
+.opt b{font-size:14px}
+.opt .op-pr{margin-left:auto;font-weight:700;font-size:14px}
+.opt.on{border-color:var(--red);background:var(--red-soft)}
+.opt.on .radio{border-color:var(--red)}
+.opt.on .radio::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--red)}
+.qtyrow{display:flex;align-items:center;gap:16px;margin-top:20px}
+.stepper{display:flex;align-items:center;gap:0;border:1.5px solid var(--line-strong);border-radius:12px;overflow:hidden}
+.stepper button{width:40px;height:40px;font-size:19px;font-weight:600;color:var(--red);transition:.12s}
+.stepper button:hover{background:var(--red-soft)}
+.stepper .q{width:36px;text-align:center;font-weight:700;font-size:15px}
+.cta-dock{position:absolute;bottom:0;left:0;right:0;padding:14px 22px 30px;background:linear-gradient(transparent,var(--cream) 38%);z-index:30}
+.cta{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+  background:linear-gradient(160deg,var(--red),var(--red-deep));color:#fff;font-size:15.5px;font-weight:700;
+  padding:17px 22px;border-radius:16px;box-shadow:0 12px 26px -8px rgba(201,55,44,.55);
+  transition:.18s;letter-spacing:.01em;
+}
+.cta:hover{transform:translateY(-1px);box-shadow:0 16px 30px -8px rgba(201,55,44,.6)}
+.cta.ghost{background:var(--paper);color:var(--ink);border:1.5px solid var(--line-strong);box-shadow:none}
+.cta.dark{background:var(--ink);box-shadow:0 12px 26px -10px rgba(39,32,29,.5)}
+.cta .amt{margin-left:auto;font-family:var(--disp)}
+.cta .amt-l{margin-left:0}
+
+/* cart / checkout */
+.cline{display:flex;gap:12px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md);padding:13px;margin-bottom:10px;box-shadow:var(--sh-card)}
+.cline .ph{width:58px;height:58px;border-radius:11px;flex:none;display:grid;place-items:center}
+.cline .ph svg{width:30px;height:30px}
+.cline b{font-size:13.5px;display:block}
+.cline .vr{font-size:11.5px;color:var(--ink-soft);margin-top:2px}
+.cline .pr{font-weight:700;font-size:13.5px;margin-top:4px}
+.mini-step{display:flex;align-items:center;border:1.5px solid var(--red-mist);background:var(--red-soft);border-radius:10px;margin-left:auto;flex:none}
+.mini-step button{width:29px;height:31px;color:var(--red);font-weight:700;font-size:15px}
+.mini-step .q{width:22px;text-align:center;font-size:13px;font-weight:700;color:var(--red-deep)}
+.bill{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md);padding:18px;margin-top:16px;box-shadow:var(--sh-card)}
+.bill .r{display:flex;justify-content:space-between;font-size:13.5px;color:var(--ink-soft);padding:5px 0}
+.bill .r.tot{border-top:1px dashed var(--line-strong);margin-top:8px;padding-top:12px;color:var(--ink);font-weight:750;font-size:15px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:7px}
+.field input{width:100%;padding:14px 15px;border:1.5px solid var(--line-strong);border-radius:13px;font-size:15px;background:var(--paper);color:var(--ink);outline:none;transition:.15s}
+.field input:focus{border-color:var(--red);box-shadow:0 0 0 3px var(--red-soft)}
+.hintcard{display:flex;gap:11px;align-items:flex-start;background:var(--gold-soft);border:1px solid #F2DFB8;border-radius:var(--r-sm);padding:12px 14px;font-size:12.5px;line-height:1.5;color:#7A5A17;margin-top:14px}
+.login-nudge{display:flex;align-items:center;gap:12px;background:var(--paper);border:1.5px dashed var(--line-strong);border-radius:var(--r-md);padding:14px 16px;margin-bottom:20px;width:100%;text-align:left;transition:.15s}
+.login-nudge:hover{border-color:var(--red)}
+.login-nudge b{font-size:13.5px;display:block}
+.login-nudge span{font-size:12px;color:var(--ink-soft)}
+.login-nudge .aro{margin-left:auto;color:var(--red)}
+
+/* auth */
+.auth-hero{display:flex;flex-direction:column;align-items:center;padding:26px 0 6px}
+.auth-hero .mark{width:74px;height:74px;filter:drop-shadow(0 10px 20px rgba(201,55,44,.3))}
+.auth-hero h2{font-family:var(--disp);font-weight:700;font-size:24px;letter-spacing:-.02em;margin-top:16px}
+.auth-hero p{font-size:13.5px;color:var(--ink-soft);margin-top:5px}
+.auth-hero p em{font-family:var(--serif);font-style:italic;color:var(--red)}
+.socialbtn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;border:1.5px solid var(--line-strong);border-radius:14px;font-size:14.5px;font-weight:600;background:var(--paper);margin-bottom:10px;transition:.15s}
+.socialbtn:hover{border-color:var(--ink)}
+.divider{display:flex;align-items:center;gap:14px;margin:18px 0;color:var(--ink-faint);font-size:12px;font-weight:600;letter-spacing:.06em}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line)}
+.otp-row{display:flex;gap:9px;justify-content:center;margin:20px 0 6px}
+.otp{width:46px;height:56px;border:1.5px solid var(--line-strong);border-radius:13px;text-align:center;font-size:22px;font-weight:700;font-family:var(--disp);background:var(--paper);outline:none;transition:.15s;color:var(--ink)}
+.otp:focus{border-color:var(--red);box-shadow:0 0 0 3px var(--red-soft)}
+.resend{text-align:center;font-size:13px;color:var(--ink-soft);margin-top:10px}
+.resend b{color:var(--red)}
+
+/* payment */
+.pay-sheet{background:var(--paper);border-radius:26px 26px 0 0;margin-top:auto;padding:22px 22px 34px;box-shadow:0 -18px 44px rgba(39,32,29,.14);position:relative;z-index:5}
+.pay-grab{width:44px;height:5px;border-radius:3px;background:var(--line-strong);margin:0 auto 18px}
+.payhead{display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px dashed var(--line)}
+.payhead .mark{width:40px;height:40px}
+.payhead b{font-size:15px;display:block}
+.payhead span{font-size:12px;color:var(--ink-soft)}
+.payhead .amtbig{margin-left:auto;font-family:var(--disp);font-weight:750;font-size:21px}
+.upi-opt{width:100%;display:flex;align-items:center;gap:13px;padding:14px 4px;border-bottom:1px solid var(--line);text-align:left;transition:.13s}
+.upi-opt:hover{background:var(--cream)}
+.upi-ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:none;font-weight:800;font-size:13px;color:#fff;font-family:var(--disp)}
+.upi-opt b{font-size:14px}
+.upi-opt span{display:block;font-size:11.5px;color:var(--ink-soft);margin-top:1px}
+.upi-opt .aro{margin-left:auto;color:var(--ink-faint)}
+.paydim{flex:1;background:linear-gradient(rgba(22,18,16,.35),rgba(22,18,16,.55));display:flex;align-items:center;justify-content:center}
+.paydim .ordermini{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(8px);color:#fff;border-radius:var(--r-md);padding:14px 20px;font-size:13px;text-align:center}
+.demo-tools{display:flex;gap:9px;margin-top:16px}
+.demo-tools button{flex:1;font-size:12px;font-weight:700;padding:11px;border-radius:11px;letter-spacing:.02em}
+.demo-ok{background:var(--green-soft);color:var(--green);border:1px solid #CBE3D2}
+.demo-no{background:var(--red-soft);color:var(--red-deep);border:1px solid var(--red-mist)}
+.demo-cap{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);text-align:center;margin-top:12px}
+
+/* confirmation + tracking */
+.confetti-zone{position:relative;display:flex;flex-direction:column;align-items:center;padding:34px 0 10px}
+.confetti-zone .mark{width:96px;height:96px;filter:drop-shadow(0 14px 26px rgba(201,55,44,.35));animation:bop 2.4s ease-in-out infinite}
+@keyframes bop{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
+.conf-spark{position:absolute;font-size:17px;animation:spark 2.2s ease-in-out infinite}
+@keyframes spark{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-7px)}}
+.confirm-t{font-family:var(--disp);font-weight:750;font-size:26px;letter-spacing:-.025em;text-align:center;margin-top:18px}
+.confirm-t em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--red)}
+.confirm-s{font-size:13.5px;color:var(--ink-soft);text-align:center;margin-top:6px;line-height:1.55}
+.codecard{
+  margin:24px 22px 0;background:linear-gradient(160deg,var(--red),var(--red-deep));border-radius:var(--r-lg);
+  padding:22px;text-align:center;color:#fff;position:relative;overflow:hidden;box-shadow:var(--sh-pop);
+}
+.codecard::before{content:"";position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.06'/%3E%3C/svg%3E")}
+.codecard .lb{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;opacity:.85}
+.codecard .code{font-family:var(--disp);font-weight:800;font-size:44px;letter-spacing:.06em;margin-top:6px}
+.codecard .st{font-size:12.5px;opacity:.9;margin-top:8px;position:relative}
+.track-steps{margin:22px 22px 0;background:var(--paper);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px;box-shadow:var(--sh-card)}
+.tstep{display:flex;gap:15px;position:relative;padding-bottom:26px}
+.tstep:last-child{padding-bottom:0}
+.tstep::before{content:"";position:absolute;left:13px;top:30px;bottom:2px;width:2px;background:var(--line);border-radius:2px}
+.tstep:last-child::before{display:none}
+.tstep .nd{width:28px;height:28px;border-radius:50%;border:2px solid var(--line-strong);background:var(--paper);display:grid;place-items:center;flex:none;z-index:1;transition:.3s;color:transparent}
+.tstep b{font-size:14px;display:block;color:var(--ink-faint);transition:.3s}
+.tstep span{font-size:12px;color:var(--ink-faint)}
+.tstep.done .nd{background:var(--green);border-color:var(--green);color:#fff}
+.tstep.done b{color:var(--ink)}
+.tstep.done::before{background:var(--green)}
+.tstep.now .nd{border-color:var(--red);color:transparent;position:relative}
+.tstep.now .nd::after{content:"";width:11px;height:11px;border-radius:50%;background:var(--red);animation:pulse 1.4s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(201,55,44,.4)}70%{box-shadow:0 0 0 9px rgba(201,55,44,0)}100%{box-shadow:0 0 0 0 rgba(201,55,44,0)}}
+.tstep.now b{color:var(--red);font-weight:750}
+.livechip{display:inline-flex;align-items:center;gap:7px;background:var(--green-soft);color:var(--green);font-size:11.5px;font-weight:700;padding:5px 12px;border-radius:999px;letter-spacing:.04em}
+.livechip::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.4s infinite}
+
+/* profile */
+.prof-head{display:flex;align-items:center;gap:15px;padding:18px 22px 6px}
+.avatar{width:58px;height:58px;border-radius:50%;background:linear-gradient(150deg,var(--red),var(--red-deep));display:grid;place-items:center;color:#fff;font-family:var(--disp);font-weight:750;font-size:21px;flex:none}
+.prof-head b{font-size:17px;display:block;letter-spacing:-.01em}
+.prof-head span{font-size:12.5px;color:var(--ink-soft)}
+.histcard{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md);padding:15px;margin-bottom:11px;box-shadow:var(--sh-card)}
+.histcard .top{display:flex;align-items:center;gap:9px}
+.histcard .top b{font-size:13.5px}
+.histcard .top time{font-size:11.5px;color:var(--ink-faint);margin-left:auto}
+.statuspill{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;letter-spacing:.05em;text-transform:uppercase}
+.sp-done{background:var(--green-soft);color:var(--green)}
+.sp-live{background:var(--red-soft);color:var(--red-deep)}
+.histcard .its{font-size:12.5px;color:var(--ink-soft);margin-top:7px;line-height:1.5}
+.histcard .bot{display:flex;align-items:center;margin-top:11px;padding-top:11px;border-top:1px dashed var(--line)}
+.histcard .bot .pr{font-weight:750;font-size:14px}
+.reorder{margin-left:auto;font-size:12.5px;font-weight:700;color:var(--red);background:var(--red-soft);border:1px solid var(--red-mist);border-radius:10px;padding:7px 15px;transition:.15s}
+.reorder:hover{background:var(--red);color:#fff}
+.setrow{width:100%;display:flex;align-items:center;gap:13px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r-sm);padding:14px 16px;margin-bottom:9px;font-size:14px;font-weight:600;text-align:left}
+.setrow svg{color:var(--ink-soft)}
+.setrow .aro{margin-left:auto;color:var(--ink-faint)}
+
+/* ============ ADMIN (desktop frame) ============ */
+.desktop{
+  background:#161210;border-radius:22px;padding:10px 10px 0;box-shadow:0 2px 4px rgba(0,0,0,.14),0 44px 90px -30px rgba(39,32,29,.42),inset 0 0 0 2px #34302c;
+  overflow:hidden;
+}
+.desk-chrome{display:flex;align-items:center;gap:8px;padding:6px 10px 12px}
+.desk-chrome .cd{width:11px;height:11px;border-radius:50%}
+.desk-url{flex:1;max-width:340px;margin:0 auto;background:#2b2523;border-radius:8px;color:#a99d94;font-size:11.5px;padding:5px 14px;text-align:center}
+.desk-view{background:var(--cream);border-radius:12px 12px 0 0;height:700px;overflow:hidden;position:relative}
+.ascr{position:absolute;inset:0;display:none}
+.ascr.on{display:flex;animation:scrIn .3s cubic-bezier(.2,.8,.25,1)}
+.admin-shell{display:flex;width:100%}
+.aside{width:218px;flex:none;background:#211a17;color:#CDBFB6;display:flex;flex-direction:column;padding:20px 14px}
+.aside .lk{display:flex;align-items:center;gap:10px;padding:0 8px 20px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:14px}
+.aside .lk .mark{width:32px;height:32px}
+.aside .lk b{font-family:var(--disp);font-weight:700;color:#fff;font-size:16px}
+.anav{display:flex;flex-direction:column;gap:3px}
+.anav button{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:10px;font-size:13.5px;font-weight:600;color:#B3A69C;text-align:left;transition:.15s}
+.anav button:hover{color:#fff;background:rgba(255,255,255,.06)}
+.anav button.on{background:var(--red);color:#fff;box-shadow:0 8px 18px -8px rgba(201,55,44,.6)}
+.aside .usr{margin-top:auto;display:flex;align-items:center;gap:10px;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,.08)}
+.aside .usr .av{width:32px;height:32px;border-radius:50%;background:var(--gold);color:#5C4308;display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
+.aside .usr b{font-size:12.5px;color:#fff;display:block}
+.aside .usr span{font-size:11px;color:#8d817a}
+.amain{flex:1;overflow-y:auto;padding:26px 30px}
+.amain::-webkit-scrollbar{width:0}
+.ahead{display:flex;align-items:center;gap:16px;margin-bottom:22px}
+.ahead h2{font-family:var(--disp);font-weight:700;font-size:22px;letter-spacing:-.02em}
+.ahead .sub{font-size:12.5px;color:var(--ink-soft);margin-top:2px}
+.abtn{display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;font-size:13px;font-weight:700;padding:10px 18px;border-radius:11px;transition:.15s;box-shadow:0 8px 18px -8px rgba(201,55,44,.55)}
+.abtn:hover{background:var(--red-deep)}
+.abtn.lite{background:var(--paper);color:var(--ink);border:1px solid var(--line-strong);box-shadow:none}
+.statrow{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:22px}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md);padding:16px 18px;box-shadow:var(--sh-card)}
+.stat .k{font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-faint)}
+.stat .v{font-family:var(--disp);font-weight:750;font-size:26px;margin-top:5px;letter-spacing:-.02em}
+.stat .d{font-size:11.5px;color:var(--green);font-weight:600;margin-top:3px}
+.kanban{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;align-items:start}
+.kcol{background:var(--cream-deep);border:1px solid var(--line);border-radius:var(--r-md);padding:12px}
+.kcol h4{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-soft);padding:4px 6px 12px}
+.kcol h4 .cnt{margin-left:auto;background:var(--paper);border:1px solid var(--line-strong);border-radius:8px;font-size:11px;padding:2px 8px}
+.ocard{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:13px;margin-bottom:10px;box-shadow:var(--sh-card);animation:scrIn .3s}
+.ocard .oc-top{display:flex;align-items:center;gap:8px}
+.ocard .code{font-family:var(--disp);font-weight:750;font-size:14.5px;letter-spacing:.02em}
+.ocard .ago{font-size:11px;color:var(--ink-faint);margin-left:auto}
+.ocard .cust{font-size:12px;color:var(--ink-soft);margin-top:2px}
+.ocard ul{list-style:none;margin:9px 0;padding:9px 0;border-top:1px dashed var(--line);border-bottom:1px dashed var(--line)}
+.ocard li{font-size:12.5px;display:flex;padding:2.5px 0}
+.ocard li .q{color:var(--red);font-weight:700;width:30px;flex:none}
+.ocard li .p{margin-left:auto;color:var(--ink-soft)}
+.ocard .oc-bot{display:flex;align-items:center;gap:8px}
+.ocard .tot{font-weight:750;font-size:13.5px}
+.oadv{margin-left:auto;font-size:12px;font-weight:700;padding:8px 14px;border-radius:9px;background:var(--ink);color:var(--cream);transition:.15s}
+.oadv:hover{background:var(--red)}
+.oadv.rdy{background:var(--green)}
+.ocancel{font-size:11.5px;color:var(--ink-faint);font-weight:600}
+.ocancel:hover{color:var(--red)}
+.newflash{outline:2px solid var(--red);outline-offset:2px}
+.soundtoggle{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--ink-soft);background:var(--paper);border:1px solid var(--line-strong);padding:9px 15px;border-radius:11px;margin-left:auto}
+.soundtoggle .dotp{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.4s infinite}
+/* admin menu editor */
+.medit{display:grid;grid-template-columns:190px 1fr;gap:16px;align-items:start}
+.mcats{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md);padding:10px;box-shadow:var(--sh-card)}
+.mcats button{width:100%;text-align:left;font-size:13px;font-weight:600;padding:10px 12px;border-radius:9px;color:var(--ink-soft);display:flex;transition:.13s}
+.mcats button .n{margin-left:auto;font-size:11px;color:var(--ink-faint)}
+.mcats button.on{background:var(--red-soft);color:var(--red-deep)}
+.mtable{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md);box-shadow:var(--sh-card);overflow:hidden}
+.mrow{display:grid;grid-template-columns:52px 1fr 110px 110px 90px;gap:12px;align-items:center;padding:12px 18px;border-bottom:1px solid var(--line);font-size:13.5px}
+.mrow:last-child{border-bottom:none}
+.mrow.hd{background:var(--cream-deep);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);padding:10px 18px}
+.mrow .thumb{width:42px;height:42px;border-radius:10px;display:grid;place-items:center}
+.mrow .thumb svg{width:23px;height:23px}
+.mrow b{font-weight:650;display:flex;align-items:center;gap:7px}
+.mrow small{display:block;font-weight:400;color:var(--ink-faint);font-size:11.5px;margin-top:1px}
+.switch{width:40px;height:23px;border-radius:12px;background:var(--line-strong);position:relative;transition:.18s;flex:none}
+.switch::after{content:"";position:absolute;top:2.5px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.18s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch.on{background:var(--green)}
+.switch.on::after{left:19px}
+.editlink{font-size:12.5px;font-weight:700;color:var(--red)}
+/* stores + staff */
+.storegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+.scard{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md);padding:19px;box-shadow:var(--sh-card)}
+.scard .top{display:flex;align-items:flex-start;gap:12px}
+.scard .pin{width:42px;height:42px;border-radius:12px;background:linear-gradient(150deg,var(--red),var(--red-deep));display:grid;place-items:center;flex:none}
+.scard b{font-size:15px;display:block}
+.scard .addr{font-size:12.5px;color:var(--ink-soft);margin-top:3px;line-height:1.5}
+.scard .hrs{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.tagh{font-size:11.5px;font-weight:600;background:var(--cream-deep);border:1px solid var(--line);color:var(--ink-soft);padding:4px 10px;border-radius:8px}
+.scard .bot{display:flex;align-items:center;margin-top:15px;padding-top:13px;border-top:1px dashed var(--line);gap:12px;font-size:12.5px;font-weight:600;color:var(--ink-soft)}
+.strow{display:grid;grid-template-columns:1fr 180px 150px 90px;gap:12px;align-items:center;padding:13px 18px;border-bottom:1px solid var(--line);font-size:13.5px}
+.strow:last-child{border:none}
+.strow .av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:12.5px;flex:none}
+.rolechip{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;letter-spacing:.04em}
+.rc-adm{background:var(--red-soft);color:var(--red-deep)}
+.rc-stf{background:var(--green-soft);color:var(--green)}
+/* admin login */
+.aloginwrap{width:100%;display:grid;place-items:center;background:
+  radial-gradient(700px 380px at 75% 15%, rgba(201,55,44,.09), transparent 60%), var(--cream)}
+.alogin{width:380px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r-lg);padding:34px;box-shadow:var(--sh-pop);text-align:center}
+.alogin .mark{width:66px;height:66px;margin:0 auto}
+.alogin h2{font-family:var(--disp);font-weight:700;font-size:21px;margin-top:14px;letter-spacing:-.02em}
+.alogin p{font-size:13px;color:var(--ink-soft);margin:5px 0 22px}
+.alogin .field{text-align:left}
+
+.toast{
+  position:fixed;bottom:26px;left:50%;transform:translate(-50%,80px);background:var(--ink);color:var(--cream);
+  font-size:13.5px;font-weight:600;padding:13px 22px;border-radius:14px;box-shadow:var(--sh-pop);
+  transition:.35s cubic-bezier(.2,.8,.25,1);z-index:100;opacity:0;display:flex;gap:9px;align-items:center;
+}
+.toast.show{transform:translate(-50%,0);opacity:1}
+.footer{max-width:1340px;margin:0 auto;padding:26px 34px 46px;border-top:1px solid var(--line);display:flex;gap:12px;align-items:center;color:var(--ink-faint);font-size:12.5px}
+@media (max-width:1080px){.proto{grid-template-columns:1fr}.screen-index{position:static;order:2}.brand-grid{grid-template-columns:1fr}.princ{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ SVG DEFS ═══════════ -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <!-- Kooks mascot (placeholder recreation of the IG mark) -->
+    <g id="mascot">
+      <circle cx="60" cy="60" r="58" fill="var(--red)"/>
+      <circle cx="60" cy="60" r="58" fill="none" stroke="rgba(255,255,255,.0)"/>
+      <!-- toque -->
+      <circle cx="45" cy="31" r="10.5" fill="var(--red)" stroke="#fff" stroke-width="4"/>
+      <circle cx="75" cy="31" r="10.5" fill="var(--red)" stroke="#fff" stroke-width="4"/>
+      <circle cx="60" cy="24" r="12.5" fill="var(--red)" stroke="#fff" stroke-width="4"/>
+      <rect x="44" y="33" width="32" height="12" rx="5" fill="var(--red)" stroke="#fff" stroke-width="4"/>
+      <!-- glasses = the "oo" -->
+      <circle cx="45" cy="63" r="13.5" fill="var(--red)" stroke="#fff" stroke-width="4.5"/>
+      <circle cx="75" cy="63" r="13.5" fill="var(--red)" stroke="#fff" stroke-width="4.5"/>
+      <path d="M57 61 q3 -5 6 0" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+      <!-- mustache -->
+      <g fill="#fff">
+        <path d="M60 80 C55 88 44 91 37 85 C34.5 82.8 36 79.5 39 80.6 C45 82.8 52 80 55.5 74.5 C57.5 71.5 60 74.5 60 78 Z"/>
+        <path d="M60 80 C65 88 76 91 83 85 C85.5 82.8 84 79.5 81 80.6 C75 82.8 68 80 64.5 74.5 C62.5 71.5 60 74.5 60 78 Z"/>
+        <path d="M56.2 90 L63.8 90 L60 99 Z"/>
+      </g>
+    </g>
+    <!-- line-art food icons -->
+    <g id="i-drum" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16.7 3.3a5.6 5.6 0 0 0-7.9 7.9l1.7 1.7-5 5"/>
+      <path d="M10.5 12.9l1.6 1.6"/>
+      <circle cx="4.4" cy="19.6" r="1.7"/><circle cx="6.9" cy="17.1" r="1.7"/>
+      <path d="M13.5 6.5c.8-.8 2.2-.8 3 0"/>
+    </g>
+    <g id="i-burger" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 10a8 8 0 0 1 16 0z"/>
+      <path d="M3.5 14h17"/>
+      <path d="M3.5 17.5h17v.6c0 1.6-1.5 2.9-3.4 2.9H6.9c-1.9 0-3.4-1.3-3.4-2.9z"/>
+      <path d="M8 7h.01M12 6h.01M16 7h.01"/>
+    </g>
+    <g id="i-fries" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 9l1.5 12h9L18 9"/>
+      <path d="M8 9V4M12 9V3M16 9V4M10 9V5.5M14 9V5.5"/>
+      <path d="M5 9h14"/>
+    </g>
+    <g id="i-bucket" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4.5 8l2 13h11l2-13"/>
+      <path d="M4 8h16M7 8c0-2.8 2.2-5 5-5s5 2.2 5 5"/>
+      <path d="M8 12l.7 5M12 12v5M16 12l-.7 5"/>
+    </g>
+    <g id="i-cup" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6.5 8l1.8 13h7.4L17.5 8"/>
+      <path d="M5.5 8h13M12 8l2.5-6 3 1"/>
+      <path d="M7.3 13h9.4"/>
+    </g>
+    <g id="i-wrap" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3.5 17c1-6 5-11 9.5-12.5 3.5-1.2 7 .3 7.5 3 .4 2.4-1.5 4-4 4.5"/>
+      <path d="M3.5 17c4.5 2 12 2 17-4"/>
+      <path d="M3.5 17c2.5 2.8 8 3.6 11.5 2"/>
+      <path d="M9.5 8.5c1.5 1 4 1.2 6-.5"/>
+    </g>
+    <!-- ui icons -->
+    <g id="i-pin" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="3"/>
+    </g>
+    <g id="i-back" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></g>
+    <g id="i-arrow" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></g>
+    <g id="i-bag" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1 14H5L6 7z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></g>
+    <g id="i-home" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z"/></g>
+    <g id="i-receipt" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.5L14 21l-2-1.5L10 21l-2-1.5L6 21z"/><path d="M9.5 8h5M9.5 12h5"/></g>
+    <g id="i-user" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></g>
+    <g id="i-search" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></g>
+    <g id="i-check" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5 10-11"/></g>
+    <g id="i-clock" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></g>
+    <g id="i-phone" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></g>
+    <g id="i-store" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l1.5-5h13L20 9M4 9v11h16V9M4 9h16M9.5 20v-6h5v6"/></g>
+    <g id="i-grid" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></g>
+    <g id="i-people" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8.5" r="3.5"/><path d="M2.5 20c0-3.5 3-5.5 6.5-5.5s6.5 2 6.5 5.5"/><path d="M16 5.5a3.5 3.5 0 0 1 0 6.8M17.5 14.7c2.3.7 4 2.4 4 5.3"/></g>
+    <g id="i-bell" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 1 1 12 0c0 5 2 6.5 2 6.5H4S6 14 6 9z"/><path d="M10 19.5a2.2 2.2 0 0 0 4 0"/></g>
+    <g id="i-google"><path fill="#4285F4" d="M21.6 12.2c0-.7-.06-1.4-.18-2H12v3.9h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.4z"/><path fill="#34A853" d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1a5.9 5.9 0 0 1-5.5-4H3.2v2.6A10 10 0 0 0 12 22z"/><path fill="#FBBC05" d="M6.5 14a6 6 0 0 1 0-3.9V7.5H3.2a10 10 0 0 0 0 9z"/><path fill="#EA4335" d="M12 6c1.5 0 2.8.5 3.8 1.5L18.7 5A10 10 0 0 0 3.2 7.5L6.5 10A5.9 5.9 0 0 1 12 6z"/></g>
+    <g id="i-apple" fill="currentColor"><path d="M16.7 12.9c0-2.4 2-3.6 2-3.7-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.2-2.8.9-3.6.9-.7 0-1.9-.9-3.1-.8-1.6 0-3 .9-3.9 2.4-1.6 2.9-.4 7.1 1.2 9.4.8 1.1 1.7 2.4 3 2.4 1.2-.1 1.7-.8 3.1-.8s1.9.8 3.1.8c1.3 0 2.1-1.2 2.9-2.3.9-1.3 1.3-2.6 1.3-2.7-.1 0-2.6-1-2.6-3.8zM14.4 5.6c.6-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1.1.1 2.2-.6 2.8-1.4z"/></g>
+    <g id="i-veg-leaf" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19C5 9 12 4 20 4c0 8-5 15-15 15z"/><path d="M5 19c2-5 6-9 10-11"/></g>
+    <g id="i-edit" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19.5 8.5a2.1 2.1 0 0 0-3-3L5 17z"/><path d="M13.5 6.5l3 3"/></g>
+    <g id="i-plus" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></g>
+  </defs>
+</svg>
+
+<!-- ═══════════ TOP BAR ═══════════ -->
+<header class="topbar">
+  <div class="lockup">
+    <svg class="mark" viewBox="0 0 120 120"><use href="#mascot"/></svg>
+    <div>
+      <span class="wm">Kooks</span><span class="tg">…sofresh</span>
+      <div class="vtag">Design prototype · v0.1</div>
+    </div>
+  </div>
+  <nav class="navtabs">
+    <button class="navtab on" data-sec="sec-brand">Brand</button>
+    <button class="navtab" data-sec="sec-app">Customer App</button>
+    <button class="navtab" data-sec="sec-admin">Admin Console</button>
+  </nav>
+</header>
+
+<!-- ═══════════ BRAND ═══════════ -->
+<section class="section on" id="sec-brand">
+  <div class="sec-head">
+    <div class="sec-kick">01 · Brand foundation</div>
+    <h1 class="sec-title">Crispy, warm &amp; <em>…sofresh</em></h1>
+    <p class="sec-sub">Derived from @kooksofficial.in — the white line-art chef on tomato red, warm cream surfaces, and a fresh-green accent held in reserve. The mascot below is a placeholder recreation; it swaps 1:1 for the original logo file.</p>
+  </div>
+  <div class="brand-grid">
+    <div class="hero-mark">
+      <svg class="mark" viewBox="0 0 120 120"><use href="#mascot"/></svg>
+      <div class="hero-word"><div class="w">KOOKS</div><div class="t">…sofresh</div></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:26px">
+      <div class="bcard">
+        <h3>Palette</h3>
+        <div class="swatches">
+          <div class="sw" style="background:#C9372C;color:#fff"><b>Kooks Red</b><span>#C9372C</span></div>
+          <div class="sw" style="background:#A82A20;color:#fff"><b>Deep Red</b><span>#A82A20</span></div>
+          <div class="sw" style="background:#27201D;color:#fff"><b>Charcoal</b><span>#27201D</span></div>
+          <div class="sw" style="background:#FAF5EC;border:1px solid #EBE2D4"><b>Cream</b><span>#FAF5EC</span></div>
+          <div class="sw" style="background:#2E7D4F;color:#fff"><b>Fresh Green</b><span>#2E7D4F</span></div>
+          <div class="sw" style="background:#E5A33C;color:#5C4308"><b>Honey Gold</b><span>#E5A33C</span></div>
+        </div>
+      </div>
+      <div class="bcard type-spec">
+        <h3>Typography</h3>
+        <div class="row"><span class="lbl">Display</span><span style="font-family:var(--disp);font-weight:750;font-size:26px;letter-spacing:-.02em">Bricolage Grotesque</span></div>
+        <div class="row"><span class="lbl">Body / UI</span><span style="font-size:17px">Instrument Sans — menus, orders, everything readable</span></div>
+        <div class="row"><span class="lbl">Flourish</span><span style="font-family:var(--serif);font-style:italic;font-size:22px;color:var(--red)">Instrument Serif — …sofresh moments</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="princ">
+    <div class="p"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24"><use href="#i-drum"/></svg></div><b>Appetite first</b><span>Big imagery, warm gradients, food always the hero. Red used with confidence, never timidly.</span></div>
+    <div class="p"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24"><use href="#i-clock"/></svg></div><b>Two-minute ordering</b><span>Store → menu → pay is a straight line. Guest checkout always available; login earns convenience, never gates.</span></div>
+    <div class="p"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24"><use href="#i-check"/></svg></div><b>Certainty at pickup</b><span>Webhook-confirmed payment, a big pickup code, and a live status stepper — no ambiguity for anyone.</span></div>
+  </div>
+</section>
+
+<!-- ═══════════ CUSTOMER APP ═══════════ -->
+<section class="section" id="sec-app">
+  <div class="sec-head">
+    <div class="sec-kick">02 · Customer app — Android &amp; iOS</div>
+    <h1 class="sec-title">Order ahead, <em>pick up hot</em></h1>
+    <p class="sec-sub">Fully navigable — tap through the phone like the real app, or jump to any screen with the chips. Food tiles are placeholder line-art; real photography drops in via the admin.</p>
+  </div>
+  <div class="proto">
+    <div class="phone">
+      <div class="viewport">
+        <div class="notch"></div>
+        <div class="statusbar"><span>9:41</span><span class="sig"><svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2.5" width="3" height="9.5" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1"/></svg><svg width="24" height="12" viewBox="0 0 24 12"><rect x="0" y="1" width="20" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.2"/><rect x="2" y="3" width="13" height="6" rx="1.5" fill="currentColor"/><path d="M21.5 4v4a2.2 2.2 0 0 0 0-4z" fill="currentColor"/></svg></span></div>
+        <div class="homebar"></div>
+
+        <!-- ── S1 · HOME / STORE PICKER ── -->
+        <div class="scr on" id="s-home">
+          <div class="scr-body app-pad" style="padding-bottom:110px">
+            <div class="greet">
+              <div class="hi">Salaam! 👋</div>
+              <h1>Which Kooks are you<br>picking up from <em>today?</em></h1>
+            </div>
+            <div class="pickup-strip"><svg width="16" height="16" viewBox="0 0 24 24"><use href="#i-bag"/></svg> Pickup only — skip the queue, we don't deliver</div>
+            <div class="city-lbl">Srinagar</div>
+            <button class="store-card" data-go="s-menu">
+              <span class="pin"><svg viewBox="0 0 24 24"><use href="#i-pin"/></svg></span>
+              <span><b>Kooks · Residency Road</b><span class="meta"><span class="dot-open"></span>Open till 11 pm · <span class="km">1.2 km</span></span></span>
+              <span class="go"><svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span>
+            </button>
+            <button class="store-card" data-go="s-menu">
+              <span class="pin"><svg viewBox="0 0 24 24"><use href="#i-pin"/></svg></span>
+              <span><b>Kooks · Hyderpora</b><span class="meta"><span class="dot-open"></span>Open till 10:30 pm · <span class="km">4.8 km</span></span></span>
+              <span class="go"><svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span>
+            </button>
+            <div class="city-lbl">Jammu</div>
+            <button class="store-card" data-go="s-menu">
+              <span class="pin"><svg viewBox="0 0 24 24"><use href="#i-pin"/></svg></span>
+              <span><b>Kooks · Gandhi Nagar</b><span class="meta"><span class="dot-open"></span>Open till 11 pm · <span class="km">262 km</span></span></span>
+              <span class="go"><svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span>
+            </button>
+            <button class="store-card" style="opacity:.6">
+              <span class="pin" style="background:var(--ink-faint)"><svg viewBox="0 0 24 24"><use href="#i-pin"/></svg></span>
+              <span><b>Kooks · Trikuta Nagar</b><span class="meta"><span class="dot-shut"></span>Opens 11 am tomorrow</span></span>
+            </button>
+          </div>
+          <div class="tabbar">
+            <button class="tb on"><svg viewBox="0 0 24 24"><use href="#i-home"/></svg>Home</button>
+            <button class="tb" data-go="s-track"><svg viewBox="0 0 24 24"><use href="#i-receipt"/></svg>Orders</button>
+            <button class="tb" data-go="s-profile"><svg viewBox="0 0 24 24"><use href="#i-user"/></svg>Profile</button>
+          </div>
+        </div>
+
+        <!-- ── S2 · MENU ── -->
+        <div class="scr" id="s-menu">
+          <div class="scr-body" style="padding-bottom:110px">
+            <div class="appbar" style="padding-top:16px">
+              <button class="backbtn" data-go="s-home"><svg width="19" height="19" viewBox="0 0 24 24"><use href="#i-back"/></svg></button>
+              <div><div class="ttl">Residency Road</div><div class="sub"><span class="dot-open"></span>Open · pickup in ~15 min</div></div>
+              <button class="cartbtn" data-go="s-cart"><svg width="18" height="18" viewBox="0 0 24 24"><use href="#i-bag"/></svg><span class="n">3</span></button>
+            </div>
+            <div class="search"><svg width="17" height="17" viewBox="0 0 24 24"><use href="#i-search"/></svg>Craving something crispy?</div>
+            <div class="cattabs">
+              <button class="cattab on">Fried Chicken</button><button class="cattab">Burgers</button><button class="cattab">Buckets</button><button class="cattab">Wraps</button><button class="cattab">Sides</button><button class="cattab">Drinks</button>
+            </div>
+            <div class="menu-list">
+              <button class="mi" data-go="s-item">
+                <span class="ph ph-a"><svg viewBox="0 0 24 24"><use href="#i-drum"/></svg></span>
+                <span class="inf"><span class="nm"><span class="ndot"></span>Classic Fried Chicken</span><span class="ds">Double-brined, hand-breaded, 11-spice crunch. The one that started it all.</span><span class="rw"><span class="pr"><small>from</small>₹199</span><span class="addmini">ADD</span></span></span>
+              </button>
+              <button class="mi" data-go="s-item">
+                <span class="ph ph-b"><svg viewBox="0 0 24 24"><use href="#i-burger"/></svg></span>
+                <span class="inf"><span class="nm"><span class="ndot"></span>Kashmiri Zinger Burger</span><span class="ds">Fiery crispy fillet, house zhoug mayo, brioche bun. Srinagar's favourite.</span><span class="rw"><span class="pr">₹179</span><span class="addmini">ADD</span></span></span>
+              </button>
+              <button class="mi" data-go="s-item">
+                <span class="ph ph-a"><svg viewBox="0 0 24 24"><use href="#i-bucket"/></svg></span>
+                <span class="inf"><span class="nm"><span class="ndot"></span>Family Feast Bucket</span><span class="ds">8 pc chicken + 2 peri fries + dips. Built for the whole gang.</span><span class="rw"><span class="pr">₹799</span><span class="addmini">ADD</span></span></span>
+              </button>
+              <button class="mi" data-go="s-item">
+                <span class="ph ph-b"><svg viewBox="0 0 24 24"><use href="#i-drum"/></svg></span>
+                <span class="inf"><span class="nm"><span class="ndot"></span>Hot Wings · 6 pc</span><span class="ds">Tossed in smoked chilli glaze. Bring tissues.</span><span class="rw"><span class="pr">₹229</span><span class="addmini">ADD</span></span></span>
+              </button>
+              <button class="mi soldout">
+                <span class="ph ph-d"><svg viewBox="0 0 24 24"><use href="#i-wrap"/></svg></span>
+                <span class="inf"><span class="nm"><span class="ndot"></span>Kooks Special Wrap</span><span class="ds">Crispy strips, pickled onion, mint chutney in a toasted lavash.</span><span class="rw"><span class="pr">₹169</span><span class="addmini">SOLD OUT</span></span></span>
+              </button>
+              <button class="mi" data-go="s-item">
+                <span class="ph ph-c"><svg viewBox="0 0 24 24"><use href="#i-fries"/></svg></span>
+                <span class="inf"><span class="nm"><span class="vdot"></span>Peri-Peri Fries</span><span class="ds">Crinkle-cut, dusted hot. Vegetarian, dangerously shareable.</span><span class="rw"><span class="pr">₹119</span><span class="addmini">ADD</span></span></span>
+              </button>
+              <button class="mi" data-go="s-item">
+                <span class="ph ph-c"><svg viewBox="0 0 24 24"><use href="#i-cup"/></svg></span>
+                <span class="inf"><span class="nm"><span class="vdot"></span>Fresh Lime Cooler</span><span class="ds">Kashmiri kagzi lime, mint, fizz. The …sofresh one.</span><span class="rw"><span class="pr">₹89</span><span class="addmini">ADD</span></span></span>
+              </button>
+            </div>
+          </div>
+          <div class="tabbar">
+            <button class="tb on"><svg viewBox="0 0 24 24"><use href="#i-home"/></svg>Home</button>
+            <button class="tb" data-go="s-track"><svg viewBox="0 0 24 24"><use href="#i-receipt"/></svg>Orders</button>
+            <button class="tb" data-go="s-profile"><svg viewBox="0 0 24 24"><use href="#i-user"/></svg>Profile</button>
+          </div>
+        </div>
+
+        <!-- ── S3 · ITEM DETAIL ── -->
+        <div class="scr" id="s-item">
+          <div class="scr-body" style="padding-top:0">
+            <div class="item-hero">
+              <button class="backbtn" data-go="s-menu"><svg width="19" height="19" viewBox="0 0 24 24"><use href="#i-back"/></svg></button>
+              <svg viewBox="0 0 24 24"><use href="#i-drum"/></svg>
+            </div>
+            <div class="sheet">
+              <h2><span class="ndot"></span>Classic Fried Chicken</h2>
+              <p class="desc">Double-brined overnight, hand-breaded to order, fried to an 11-spice golden crunch. Served with a house dip.</p>
+              <div class="optlbl">Choose size</div>
+              <button class="opt vopt on" data-p="199"><span class="radio"></span><b>2 pc</b><span class="op-pr">₹199</span></button>
+              <button class="opt vopt" data-p="379"><span class="radio"></span><b>4 pc</b><span class="op-pr">₹379</span></button>
+              <button class="opt vopt" data-p="549"><span class="radio"></span><b>6 pc</b><span class="op-pr">₹549</span></button>
+              <div class="qtyrow">
+                <div class="optlbl" style="margin:0">Quantity</div>
+                <div class="stepper" style="margin-left:auto"><button id="q-minus">−</button><span class="q" id="q-val">1</span><button id="q-plus">+</button></div>
+              </div>
+            </div>
+          </div>
+          <div class="cta-dock"><button class="cta" data-go="s-cart" id="addcta"><svg width="17" height="17" viewBox="0 0 24 24"><use href="#i-bag"/></svg>Add to cart<span class="amt" id="addamt">₹199</span></button></div>
+        </div>
+
+        <!-- ── S4 · CART ── -->
+        <div class="scr" id="s-cart">
+          <div class="scr-body app-pad" style="padding-bottom:130px">
+            <div class="appbar" style="padding:16px 0 14px">
+              <button class="backbtn" data-go="s-menu"><svg width="19" height="19" viewBox="0 0 24 24"><use href="#i-back"/></svg></button>
+              <div><div class="ttl">Your order</div><div class="sub">Pickup · Kooks Residency Road</div></div>
+            </div>
+            <div class="cline"><span class="ph ph-a"><svg viewBox="0 0 24 24"><use href="#i-drum"/></svg></span><span style="flex:1;min-width:0"><b>Classic Fried Chicken</b><span class="vr">4 pc</span><span class="pr">₹379</span></span><span class="mini-step"><button>−</button><span class="q">1</span><button>+</button></span></div>
+            <div class="cline"><span class="ph ph-b"><svg viewBox="0 0 24 24"><use href="#i-burger"/></svg></span><span style="flex:1;min-width:0"><b>Kashmiri Zinger Burger</b><span class="vr">Regular</span><span class="pr">₹179</span></span><span class="mini-step"><button>−</button><span class="q">1</span><button>+</button></span></div>
+            <div class="cline"><span class="ph ph-c"><svg viewBox="0 0 24 24"><use href="#i-fries"/></svg></span><span style="flex:1;min-width:0"><b>Peri-Peri Fries</b><span class="vr">Regular</span><span class="pr">₹119</span></span><span class="mini-step"><button>−</button><span class="q">1</span><button>+</button></span></div>
+            <div class="bill">
+              <div class="r"><span>Item total</span><span>₹677</span></div>
+              <div class="r"><span>Taxes</span><span>Included</span></div>
+              <div class="r tot"><span>To pay via UPI</span><span>₹677</span></div>
+            </div>
+            <div class="hintcard"><svg width="16" height="16" viewBox="0 0 24 24" style="flex:none;margin-top:1px"><use href="#i-clock"/></svg>Your food is prepared only after payment — usually ready in 15–20 minutes.</div>
+          </div>
+          <div class="cta-dock"><button class="cta" data-go="s-checkout">Continue<span class="amt">₹677</span></button></div>
+        </div>
+
+        <!-- ── S5 · CHECKOUT ── -->
+        <div class="scr" id="s-checkout">
+          <div class="scr-body app-pad" style="padding-bottom:130px">
+            <div class="appbar" style="padding:16px 0 18px">
+              <button class="backbtn" data-go="s-cart"><svg width="19" height="19" viewBox="0 0 24 24"><use href="#i-back"/></svg></button>
+              <div><div class="ttl">Almost there</div><div class="sub">We'll text-free — we call this number when it's ready</div></div>
+            </div>
+            <button class="login-nudge" data-go="s-auth">
+              <svg class="mark" width="38" height="38" viewBox="0 0 120 120"><use href="#mascot"/></svg>
+              <span><b>Have a Kooks account?</b><span>Log in to prefill details &amp; sync order history</span></span>
+              <span class="aro"><svg width="19" height="19" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span>
+            </button>
+            <div class="field"><label>Your name</label><input placeholder="e.g. Aamir" value=""></div>
+            <div class="field"><label>Phone number</label><input placeholder="+91" inputmode="tel"></div>
+            <div class="hintcard" style="background:var(--red-soft);border-color:var(--red-mist);color:var(--red-deep)"><svg width="16" height="16" viewBox="0 0 24 24" style="flex:none;margin-top:1px"><use href="#i-phone"/></svg>Double-check the number — the store calls it when your order is ready for pickup.</div>
+          </div>
+          <div class="cta-dock"><button class="cta" data-go="s-pay">Pay with UPI<span class="amt">₹677</span></button></div>
+        </div>
+
+        <!-- ── S6 · AUTH ── -->
+        <div class="scr" id="s-auth">
+          <div class="scr-body app-pad" style="padding-bottom:40px">
+            <div class="appbar" style="padding:16px 0 0"><button class="backbtn" data-go="s-checkout"><svg width="19" height="19" viewBox="0 0 24 24"><use href="#i-back"/></svg></button></div>
+            <div class="auth-hero">
+              <svg class="mark" viewBox="0 0 120 120"><use href="#mascot"/></svg>
+              <h2>Welcome to Kooks</h2>
+              <p>Log in or sign up — it's <em>…sofresh</em> in here</p>
+            </div>
+            <button class="socialbtn"><svg width="19" height="19" viewBox="0 0 24 24"><use href="#i-google"/></svg>Continue with Google</button>
+            <button class="socialbtn"><svg width="19" height="19" viewBox="0 0 24 24"><use href="#i-apple"/></svg>Continue with Apple</button>
+            <div class="divider">OR WITH EMAIL</div>
+            <div class="field"><label>Email address</label><input placeholder="you@example.com" inputmode="email"></div>
+            <button class="cta dark" data-go="s-otp" style="margin-top:4px">Send code</button>
+            <div class="resend" style="margin-top:16px">Prefer a password? <b>Use email &amp; password</b></div>
+            <div class="resend" style="margin-top:8px"><b data-go="s-checkout" style="cursor:pointer">Continue as guest →</b></div>
+          </div>
+        </div>
+
+        <!-- ── S7 · EMAIL OTP ── -->
+        <div class="scr" id="s-otp">
+          <div class="scr-body app-pad">
+            <div class="appbar" style="padding:16px 0 0"><button class="backbtn" data-go="s-auth"><svg width="19" height="19" viewBox="0 0 24 24"><use href="#i-back"/></svg></button></div>
+            <div class="auth-hero">
+              <svg class="mark" viewBox="0 0 120 120" style="width:60px;height:60px"><use href="#mascot"/></svg>
+              <h2>Check your inbox</h2>
+              <p>We sent a 6-digit code to <b style="color:var(--ink)">aamir@gmail.com</b></p>
+            </div>
+            <div class="otp-row">
+              <input class="otp" maxlength="1" value="4"><input class="otp" maxlength="1" value="8"><input class="otp" maxlength="1" value="2"><input class="otp" maxlength="1"><input class="otp" maxlength="1"><input class="otp" maxlength="1">
+            </div>
+            <div class="resend">Didn't get it? <b>Resend in 0:24</b></div>
+            <div style="padding:26px 0"><button class="cta" data-go="s-checkout">Verify &amp; continue</button></div>
+          </div>
+        </div>
+
+        <!-- ── S8 · PAYMENT (Razorpay UPI sheet) ── -->
+        <div class="scr" id="s-pay" style="background:var(--cream)">
+          <div class="paydim">
+            <div class="ordermini">Order #K-4827 · Kooks Residency Road<br><b style="font-size:17px;font-family:var(--disp)">₹677</b></div>
+          </div>
+          <div class="pay-sheet">
+            <div class="pay-grab"></div>
+            <div class="payhead">
+              <svg class="mark" viewBox="0 0 120 120"><use href="#mascot"/></svg>
+              <div><b>Kooks Foods</b><span>Razorpay secure · UPI</span></div>
+              <div class="amtbig">₹677</div>
+            </div>
+            <button class="upi-opt"><span class="upi-ic" style="background:#1a73e8">G</span><span><b>Google Pay</b><span>Opens GPay on this phone</span></span><span class="aro"><svg width="18" height="18" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span></button>
+            <button class="upi-opt"><span class="upi-ic" style="background:#5f259f">Pe</span><span><b>PhonePe</b><span>UPI intent</span></span><span class="aro"><svg width="18" height="18" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span></button>
+            <button class="upi-opt"><span class="upi-ic" style="background:#00baf2">Pt</span><span><b>Paytm UPI</b><span>UPI intent</span></span><span class="aro"><svg width="18" height="18" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span></button>
+            <button class="upi-opt" style="border-bottom:none"><span class="upi-ic" style="background:var(--ink)">@</span><span><b>Other UPI ID</b><span>Collect request to any UPI app</span></span><span class="aro"><svg width="18" height="18" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span></button>
+            <div class="demo-tools">
+              <button class="demo-ok" data-go="s-confirm">✓ Simulate success</button>
+              <button class="demo-no" data-go="s-cart" data-toast="Payment failed — try again from cart">✕ Simulate failure</button>
+            </div>
+            <div class="demo-cap">Prototype controls — real app opens the UPI app</div>
+          </div>
+        </div>
+
+        <!-- ── S9 · ORDER CONFIRMED ── -->
+        <div class="scr" id="s-confirm">
+          <div class="scr-body" style="padding-bottom:120px">
+            <div class="confetti-zone">
+              <span class="conf-spark" style="left:24%;top:24%">✦</span>
+              <span class="conf-spark" style="right:22%;top:16%;animation-delay:.5s">✳</span>
+              <span class="conf-spark" style="left:16%;top:64%;animation-delay:.9s;color:var(--gold)">✦</span>
+              <span class="conf-spark" style="right:18%;top:58%;animation-delay:.3s;color:var(--red)">✳</span>
+              <svg class="mark" viewBox="0 0 120 120"><use href="#mascot"/></svg>
+            </div>
+            <div class="confirm-t">Order in, Aamir —<br>it's <em>…sofresh</em> time</div>
+            <p class="confirm-s">Paid ₹677 via UPI · Kooks Residency Road<br>Ready in about <b style="color:var(--ink)">15–20 min</b></p>
+            <div class="codecard">
+              <div class="lb">Show this at the counter</div>
+              <div class="code">K-4827</div>
+              <div class="st">Residency Road, Srinagar · till 11 pm</div>
+            </div>
+          </div>
+          <div class="cta-dock">
+            <button class="cta dark" data-go="s-track">Track my order</button>
+          </div>
+        </div>
+
+        <!-- ── S10 · TRACKING ── -->
+        <div class="scr" id="s-track">
+          <div class="scr-body" style="padding-bottom:120px">
+            <div class="appbar" style="padding-top:16px">
+              <button class="backbtn" data-go="s-home"><svg width="19" height="19" viewBox="0 0 24 24"><use href="#i-back"/></svg></button>
+              <div><div class="ttl">Order K-4827</div><div class="sub">Kooks Residency Road</div></div>
+              <span class="livechip" style="margin-left:auto">LIVE</span>
+            </div>
+            <div class="track-steps" id="steps">
+              <div class="tstep done"><span class="nd"><svg width="13" height="13" viewBox="0 0 24 24"><use href="#i-check"/></svg></span><div><b>Order placed &amp; paid</b><span>6:42 pm · UPI ₹677</span></div></div>
+              <div class="tstep done"><span class="nd"><svg width="13" height="13" viewBox="0 0 24 24"><use href="#i-check"/></svg></span><div><b>Accepted by the kitchen</b><span>6:43 pm</span></div></div>
+              <div class="tstep now"><span class="nd"></span><div><b>Being freshly prepared</b><span>Crisping up right now…</span></div></div>
+              <div class="tstep"><span class="nd"><svg width="13" height="13" viewBox="0 0 24 24"><use href="#i-check"/></svg></span><div><b>Ready for pickup</b><span>We'll buzz you</span></div></div>
+            </div>
+            <div class="track-steps" style="margin-top:14px">
+              <div style="display:flex;justify-content:space-between;font-size:13px;padding-bottom:9px"><span style="color:var(--ink-soft)">1× Fried Chicken 4pc, 1× Zinger, 1× Peri Fries</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:750;border-top:1px dashed var(--line);padding-top:11px"><span>Paid via UPI</span><span>₹677</span></div>
+            </div>
+            <div class="app-pad" style="margin-top:16px">
+              <button class="cta ghost"><svg width="17" height="17" viewBox="0 0 24 24"><use href="#i-phone"/></svg>Call the store</button>
+            </div>
+          </div>
+          <div class="tabbar">
+            <button class="tb" data-go="s-home"><svg viewBox="0 0 24 24"><use href="#i-home"/></svg>Home</button>
+            <button class="tb on"><svg viewBox="0 0 24 24"><use href="#i-receipt"/></svg>Orders</button>
+            <button class="tb" data-go="s-profile"><svg viewBox="0 0 24 24"><use href="#i-user"/></svg>Profile</button>
+          </div>
+        </div>
+
+        <!-- ── S11 · PROFILE / HISTORY ── -->
+        <div class="scr" id="s-profile">
+          <div class="scr-body" style="padding-bottom:110px">
+            <div class="prof-head">
+              <div class="avatar">A</div>
+              <div><b>Aamir Shah</b><span>aamir@gmail.com · +91 60006 12345</span></div>
+            </div>
+            <div class="app-pad" style="margin-top:16px">
+              <div class="city-lbl" style="margin-top:6px">Order history</div>
+              <div class="histcard">
+                <div class="top"><b>K-4827</b><span class="statuspill sp-live">Preparing</span><time>Today, 6:42 pm</time></div>
+                <div class="its">1× Fried Chicken 4pc · 1× Zinger Burger · 1× Peri Fries</div>
+                <div class="bot"><span class="pr">₹677</span><button class="reorder" data-go="s-track">Track →</button></div>
+              </div>
+              <div class="histcard">
+                <div class="top"><b>K-3391</b><span class="statuspill sp-done">Picked up</span><time>Tue, 8:15 pm</time></div>
+                <div class="its">1× Family Feast Bucket · 2× Lime Cooler</div>
+                <div class="bot"><span class="pr">₹977</span><button class="reorder" data-go="s-cart">Reorder</button></div>
+              </div>
+              <div class="histcard">
+                <div class="top"><b>K-2764</b><span class="statuspill sp-done">Picked up</span><time>28 Jul, 1:05 pm</time></div>
+                <div class="its">2× Hot Wings 6pc · 1× Classic Fries</div>
+                <div class="bot"><span class="pr">₹557</span><button class="reorder" data-go="s-cart">Reorder</button></div>
+              </div>
+              <div class="city-lbl">Account</div>
+              <button class="setrow"><svg width="18" height="18" viewBox="0 0 24 24"><use href="#i-user"/></svg>Edit name &amp; phone<span class="aro"><svg width="17" height="17" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span></button>
+              <button class="setrow"><svg width="18" height="18" viewBox="0 0 24 24"><use href="#i-bell"/></svg>Notifications<span class="aro"><svg width="17" height="17" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span></button>
+              <button class="setrow" data-go="s-auth" style="color:var(--red)"><svg width="18" height="18" viewBox="0 0 24 24"><use href="#i-back"/></svg>Log out</button>
+            </div>
+          </div>
+          <div class="tabbar">
+            <button class="tb" data-go="s-home"><svg viewBox="0 0 24 24"><use href="#i-home"/></svg>Home</button>
+            <button class="tb" data-go="s-track"><svg viewBox="0 0 24 24"><use href="#i-receipt"/></svg>Orders</button>
+            <button class="tb on"><svg viewBox="0 0 24 24"><use href="#i-user"/></svg>Profile</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="screen-index">
+      <div class="si-group"><h4>Order flow</h4>
+        <div class="chips">
+          <button class="chip on" data-go="s-home">1 · Store picker</button>
+          <button class="chip" data-go="s-menu">2 · Menu</button>
+          <button class="chip" data-go="s-item">3 · Item detail</button>
+          <button class="chip" data-go="s-cart">4 · Cart</button>
+          <button class="chip" data-go="s-checkout">5 · Checkout</button>
+          <button class="chip" data-go="s-pay">6 · UPI payment</button>
+          <button class="chip" data-go="s-confirm">7 · Confirmed</button>
+          <button class="chip" data-go="s-track">8 · Live tracking</button>
+        </div>
+      </div>
+      <div class="si-group"><h4>Account</h4>
+        <div class="chips">
+          <button class="chip" data-go="s-auth">9 · Login / signup</button>
+          <button class="chip" data-go="s-otp">10 · Email OTP</button>
+          <button class="chip" data-go="s-profile">11 · Profile &amp; history</button>
+        </div>
+      </div>
+      <div class="flow-note"><b>Guest or logged in — never blocked</b><p>Checkout works with just a name and phone. Logging in (email OTP, password, Google, or Apple on iOS) prefills details and syncs order history across devices. Guest orders on this device attach to the account after login.</p></div>
+      <div class="flow-note"><b>Payment truth lives on the server</b><p>The confirmation screen only appears after Razorpay reports success; the kitchen sees the order only once the webhook marks it paid. Tap "Simulate failure" on the payment screen to preview the recovery path.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ ADMIN ═══════════ -->
+<section class="section" id="sec-admin">
+  <div class="sec-head">
+    <div class="sec-kick">03 · Admin console — web</div>
+    <h1 class="sec-title">One kitchen window, <em>every store</em></h1>
+    <p class="sec-sub">HQ manages stores, menu and staff; each store runs its live order board. Same Kooks design system, tuned for speed on a counter tablet or PC. Fully clickable below.</p>
+  </div>
+
+  <div style="display:flex;gap:10px;margin-bottom:18px">
+    <button class="chip on" data-ago="a-orders">Live orders</button>
+    <button class="chip" data-ago="a-menu">Menu manager</button>
+    <button class="chip" data-ago="a-stores">Stores</button>
+    <button class="chip" data-ago="a-staff">Staff</button>
+    <button class="chip" data-ago="a-login">Login</button>
+  </div>
+
+  <div class="desktop">
+    <div class="desk-chrome">
+      <span class="cd" style="background:#ff5f57"></span><span class="cd" style="background:#febc2e"></span><span class="cd" style="background:#28c840"></span>
+      <div class="desk-url">admin.kooks.in</div>
+    </div>
+    <div class="desk-view">
+
+      <!-- A0 LOGIN -->
+      <div class="ascr" id="a-login">
+        <div class="aloginwrap">
+          <div class="alogin">
+            <svg class="mark" viewBox="0 0 120 120"><use href="#mascot"/></svg>
+            <h2>Kooks Admin</h2>
+            <p>Store &amp; menu management console</p>
+            <div class="field"><label>Email</label><input value="manager.residency@kooks.in"></div>
+            <div class="field"><label>Password</label><input type="password" value="••••••••••"></div>
+            <button class="cta" data-ago="a-orders" style="margin-top:6px">Sign in</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- A1 LIVE ORDERS -->
+      <div class="ascr on" id="a-orders">
+        <div class="admin-shell">
+          <aside class="aside">
+            <div class="lk"><svg class="mark" viewBox="0 0 120 120"><use href="#mascot"/></svg><div><b>Kooks</b><div style="font-family:var(--serif);font-style:italic;font-size:11px;color:#E9A79B">…sofresh admin</div></div></div>
+            <nav class="anav">
+              <button class="on" data-ago="a-orders"><svg width="17" height="17" viewBox="0 0 24 24"><use href="#i-bell"/></svg>Live orders</button>
+              <button data-ago="a-menu"><svg width="17" height="17" viewBox="0 0 24 24"><use href="#i-grid"/></svg>Menu</button>
+              <button data-ago="a-stores"><svg width="17" height="17" viewBox="0 0 24 24"><use href="#i-store"/></svg>Stores</button>
+              <button data-ago="a-staff"><svg width="17" height="17" viewBox="0 0 24 24"><use href="#i-people"/></svg>Staff</button>
+            </nav>
+            <div class="usr"><span class="av">R</span><div><b>Residency Road</b><span>store staff</span></div></div>
+          </aside>
+          <main class="amain">
+            <div class="ahead">
+              <div><h2>Live orders</h2><div class="sub">Friday 8 Aug · Kooks Residency Road</div></div>
+              <span class="soundtoggle"><span class="dotp"></span>New-order sound on</span>
+            </div>
+            <div class="statrow">
+              <div class="stat"><div class="k">Today's orders</div><div class="v">47</div><div class="d">↑ 12% vs last Fri</div></div>
+              <div class="stat"><div class="k">Revenue</div><div class="v">₹28,430</div><div class="d">↑ 9%</div></div>
+              <div class="stat"><div class="k">Avg prep time</div><div class="v">14 min</div><div class="d">target 20</div></div>
+              <div class="stat"><div class="k">Awaiting pickup</div><div class="v">2</div><div class="d">counter shelf</div></div>
+            </div>
+            <div class="kanban" id="kanban">
+              <div class="kcol" data-col="new">
+                <h4><span style="width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block"></span>New · paid <span class="cnt">2</span></h4>
+                <div class="ocard newflash">
+                  <div class="oc-top"><span class="code">K-4831</span><span class="ago">just now</span></div>
+                  <div class="cust">Mehak · +91 70061 2xxxx</div>
+                  <ul><li><span class="q">1×</span>Family Feast Bucket<span class="p">₹799</span></li><li><span class="q">2×</span>Lime Cooler<span class="p">₹178</span></li></ul>
+                  <div class="oc-bot"><span class="tot">₹977</span><button class="ocancel">Cancel</button><button class="oadv">Accept →</button></div>
+                </div>
+                <div class="ocard">
+                  <div class="oc-top"><span class="code">K-4830</span><span class="ago">2 min</span></div>
+                  <div class="cust">Danish · +91 96222 8xxxx</div>
+                  <ul><li><span class="q">1×</span>Zinger Burger<span class="p">₹179</span></li><li><span class="q">1×</span>Peri-Peri Fries<span class="p">₹119</span></li></ul>
+                  <div class="oc-bot"><span class="tot">₹298</span><button class="ocancel">Cancel</button><button class="oadv">Accept →</button></div>
+                </div>
+              </div>
+              <div class="kcol" data-col="prep">
+                <h4><span style="width:8px;height:8px;border-radius:50%;background:var(--gold);display:inline-block"></span>Preparing <span class="cnt">2</span></h4>
+                <div class="ocard">
+                  <div class="oc-top"><span class="code">K-4827</span><span class="ago">6 min</span></div>
+                  <div class="cust">Aamir · +91 60006 1xxxx</div>
+                  <ul><li><span class="q">1×</span>Fried Chicken 4pc<span class="p">₹379</span></li><li><span class="q">1×</span>Zinger Burger<span class="p">₹179</span></li><li><span class="q">1×</span>Peri Fries<span class="p">₹119</span></li></ul>
+                  <div class="oc-bot"><span class="tot">₹677</span><button class="oadv rdy">Mark ready ✓</button></div>
+                </div>
+                <div class="ocard">
+                  <div class="oc-top"><span class="code">K-4825</span><span class="ago">11 min</span></div>
+                  <div class="cust">Iqra · +91 90188 4xxxx</div>
+                  <ul><li><span class="q">2×</span>Hot Wings 6pc<span class="p">₹458</span></li></ul>
+                  <div class="oc-bot"><span class="tot">₹458</span><button class="oadv rdy">Mark ready ✓</button></div>
+                </div>
+              </div>
+              <div class="kcol" data-col="ready">
+                <h4><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block"></span>Ready · at counter <span class="cnt">2</span></h4>
+                <div class="ocard">
+                  <div class="oc-top"><span class="code">K-4822</span><span class="ago">wait 4 min</span></div>
+                  <div class="cust">Sahil · verify code at handover</div>
+                  <ul><li><span class="q">1×</span>Chicken Popcorn<span class="p">₹159</span></li><li><span class="q">1×</span>Cooler<span class="p">₹89</span></li></ul>
+                  <div class="oc-bot"><span class="tot">₹248</span><button class="oadv">Picked up ✓</button></div>
+                </div>
+                <div class="ocard">
+                  <div class="oc-top"><span class="code">K-4819</span><span class="ago">wait 9 min</span></div>
+                  <div class="cust">Bisma · verify code at handover</div>
+                  <ul><li><span class="q">1×</span>Feast Bucket<span class="p">₹799</span></li></ul>
+                  <div class="oc-bot"><span class="tot">₹799</span><button class="oadv">Picked up ✓</button></div>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+
+      <!-- A2 MENU MANAGER -->
+      <div class="ascr" id="a-menu">
+        <div class="admin-shell">
+          <aside class="aside">
+            <div class="lk"><svg class="mark" viewBox="0 0 120 120"><use href="#mascot"/></svg><div><b>Kooks</b><div style="font-family:var(--serif);font-style:italic;font-size:11px;color:#E9A79B">…sofresh admin</div></div></div>
+            <nav class="anav">
+              <button data-ago="a-orders"><svg width="17" height="17" viewBox="0 0 24 24"><use href="#i-bell"/></svg>Live orders</button>
+              <button class="on" data-ago="a-menu"><svg width="17" height="17" viewBox="0 0 24 24"><use href="#i-grid"/></svg>Menu</button>
+              <button data-ago="a-stores"><svg width="17" height="17" viewBox="0 0 24 24"><use href="#i-store"/></svg>Stores</button>
+              <button data-ago="a-staff"><svg width="17" height="17" viewBox="0 0 24 24"><use href="#i-people"/></svg>Staff</button>
+            </nav>
+            <div class="usr"><span class="av" style="background:var(--red);color:#fff">H</span><div><b>Head Office</b><span>admin</span></div></div>
+          </aside>
+          <main class="amain">
+            <div class="ahead">
+              <div><h2>Menu manager</h2><div class="sub">One menu, all stores · per-store sold-out from Live orders</div></div>
+              <button class="abtn" style="margin-left:auto"><svg width="15" height="15" viewBox="0 0 24 24"><use href="#i-plus"/></svg>Add item</button>
+            </div>
+            <div class="medit">
+              <div class="mcats">
+                <button class="on">Fried Chicken<span class="n">6</span></button>
+                <button>Burgers<span class="n">4</span></button>
+                <button>Buckets<span class="n">3</span></button>
+                <button>Wraps<span class="n">2</span></button>
+                <button>Sides<span class="n">5</span></button>
+                <button>Drinks<span class="n">4</span></button>
+                <button style="color:var(--red);font-weight:700">+ Add category</button>
+              </div>
+              <div class="mtable">
+                <div class="mrow hd"><span>Photo</span><span>Item</span><span>Price</span><span>Variants</span><span>Available</span></div>
+                <div class="mrow"><span class="thumb ph-a"><svg viewBox="0 0 24 24"><use href="#i-drum"/></svg></span><span><b><span class="ndot"></span>Classic Fried Chicken<small>Double-brined, 11-spice crunch</small></b></span><span>from ₹199</span><span>2pc · 4pc · 6pc</span><span style="display:flex;align-items:center;gap:10px"><button class="switch on"></button><button class="editlink"><svg width="15" height="15" viewBox="0 0 24 24"><use href="#i-edit"/></svg></button></span></div>
+                <div class="mrow"><span class="thumb ph-b"><svg viewBox="0 0 24 24"><use href="#i-drum"/></svg></span><span><b><span class="ndot"></span>Hot Wings<small>Smoked chilli glaze</small></b></span><span>₹229</span><span>6pc · 12pc</span><span style="display:flex;align-items:center;gap:10px"><button class="switch on"></button><button class="editlink"><svg width="15" height="15" viewBox="0 0 24 24"><use href="#i-edit"/></svg></button></span></div>
+                <div class="mrow"><span class="thumb ph-a"><svg viewBox="0 0 24 24"><use href="#i-bucket"/></svg></span><span><b><span class="ndot"></span>Chicken Popcorn<small>Bite-size, extra crisp</small></b></span><span>₹159</span><span>Reg · Large</span><span style="display:flex;align-items:center;gap:10px"><button class="switch on"></button><button class="editlink"><svg width="15" height="15" viewBox="0 0 24 24"><use href="#i-edit"/></svg></button></span></div>
+                <div class="mrow"><span class="thumb ph-d"><svg viewBox="0 0 24 24"><use href="#i-wrap"/></svg></span><span><b><span class="ndot"></span>Kooks Special Wrap<small>Sold out today at Residency Rd</small></b></span><span>₹169</span><span>—</span><span style="display:flex;align-items:center;gap:10px"><button class="switch"></button><button class="editlink"><svg width="15" height="15" viewBox="0 0 24 24"><use href="#i-edit"/></svg></button></span></div>
+                <div class="mrow"><span class="thumb ph-c"><svg viewBox="0 0 24 24"><use href="#i-fries"/></svg></span><span><b><span class="vdot"></span>Peri-Peri Fries<small>Crinkle-cut, dusted hot</small></b></span><span>₹119</span><span>Reg · Large</span><span style="display:flex;align-items:center;gap:10px"><button class="switch on"></button><button class="editlink"><svg width="15" height="15" viewBox="0 0 24 24"><use href="#i-edit"/></svg></button></span></div>
+                <div class="mrow"><span class="thumb ph-c"><svg viewBox="0 0 24 24"><use href="#i-cup"/></svg></span><span><b><span class="vdot"></span>Fresh Lime Cooler<small>Kagzi lime &amp; mint</small></b></span><span>₹89</span><span>—</span><span style="display:flex;align-items:center;gap:10px"><button class="switch on"></button><button class="editlink"><svg width="15" height="15" viewBox="0 0 24 24"><use href="#i-edit"/></svg></button></span></div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+
+      <!-- A3 STORES -->
+      <div class="ascr" id="a-stores">
+        <div class="admin-shell">
+          <aside class="aside">
+            <div class="lk"><svg class="mark" viewBox="0 0 120 120"><use href="#mascot"/></svg><div><b>Kooks</b><div style="font-family:var(--serif);font-style:italic;font-size:11px;color:#E9A79B">…sofresh admin</div></div></div>
+            <nav class="anav">
+              <button data-ago="a-orders"><svg width="17" height="17" viewBox="0 0 24 24"><use href="#i-bell"/></svg>Live orders</button>
+              <button data-ago="a-menu"><svg width="17" height="17" viewBox="0 0 24 24"><use href="#i-grid"/></svg>Menu</button>
+              <button class="on" data-ago="a-stores"><svg width="17" height="17" viewBox="0 0 24 24"><use href="#i-store"/></svg>Stores</button>
+              <button data-ago="a-staff"><svg width="17" height="17" viewBox="0 0 24 24"><use href="#i-people"/></svg>Staff</button>
+            </nav>
+            <div class="usr"><span class="av" style="background:var(--red);color:#fff">H</span><div><b>Head Office</b><span>admin</span></div></div>
+          </aside>
+          <main class="amain">
+            <div class="ahead">
+              <div><h2>Stores</h2><div class="sub">4 locations · Kashmir &amp; Jammu</div></div>
+              <button class="abtn" style="margin-left:auto"><svg width="15" height="15" viewBox="0 0 24 24"><use href="#i-plus"/></svg>Add store</button>
+            </div>
+            <div class="storegrid">
+              <div class="scard">
+                <div class="top"><span class="pin"><svg width="21" height="21" viewBox="0 0 24 24"><use href="#i-pin"/></svg></span><div><b>Kooks · Residency Road</b><div class="addr">Regal Chowk, Residency Rd, Srinagar 190001 · +91 194 245 0021</div></div><button class="switch on" style="margin-left:auto"></button></div>
+                <div class="hrs"><span class="tagh">Mon–Sun 11:00–23:00</span><span class="tagh">34.068, 74.797</span></div>
+                <div class="bot"><span>Today: 47 orders · ₹28,430</span><button class="editlink" style="margin-left:auto">Edit store →</button></div>
+              </div>
+              <div class="scard">
+                <div class="top"><span class="pin"><svg width="21" height="21" viewBox="0 0 24 24"><use href="#i-pin"/></svg></span><div><b>Kooks · Hyderpora</b><div class="addr">Bypass Rd, Hyderpora, Srinagar 190014 · +91 194 243 8870</div></div><button class="switch on" style="margin-left:auto"></button></div>
+                <div class="hrs"><span class="tagh">Mon–Sun 11:00–22:30</span><span class="tagh">34.043, 74.775</span></div>
+                <div class="bot"><span>Today: 31 orders · ₹17,940</span><button class="editlink" style="margin-left:auto">Edit store →</button></div>
+              </div>
+              <div class="scard">
+                <div class="top"><span class="pin"><svg width="21" height="21" viewBox="0 0 24 24"><use href="#i-pin"/></svg></span><div><b>Kooks · Gandhi Nagar</b><div class="addr">Main Market, Gandhi Nagar, Jammu 180004 · +91 191 243 1188</div></div><button class="switch on" style="margin-left:auto"></button></div>
+                <div class="hrs"><span class="tagh">Mon–Sun 11:00–23:00</span><span class="tagh">32.702, 74.868</span></div>
+                <div class="bot"><span>Today: 39 orders · ₹22,105</span><button class="editlink" style="margin-left:auto">Edit store →</button></div>
+              </div>
+              <div class="scard" style="opacity:.65">
+                <div class="top"><span class="pin" style="background:var(--ink-faint)"><svg width="21" height="21" viewBox="0 0 24 24"><use href="#i-pin"/></svg></span><div><b>Kooks · Trikuta Nagar</b><div class="addr">Sector 3, Trikuta Nagar, Jammu 180012 · opening soon</div></div><button class="switch" style="margin-left:auto"></button></div>
+                <div class="hrs"><span class="tagh">Inactive — hidden from the app</span></div>
+                <div class="bot"><span>Launch checklist in progress</span><button class="editlink" style="margin-left:auto">Edit store →</button></div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+
+      <!-- A4 STAFF -->
+      <div class="ascr" id="a-staff">
+        <div class="admin-shell">
+          <aside class="aside">
+            <div class="lk"><svg class="mark" viewBox="0 0 120 120"><use href="#mascot"/></svg><div><b>Kooks</b><div style="font-family:var(--serif);font-style:italic;font-size:11px;color:#E9A79B">…sofresh admin</div></div></div>
+            <nav class="anav">
+              <button data-ago="a-orders"><svg width="17" height="17" viewBox="0 0 24 24"><use href="#i-bell"/></svg>Live orders</button>
+              <button data-ago="a-menu"><svg width="17" height="17" viewBox="0 0 24 24"><use href="#i-grid"/></svg>Menu</button>
+              <button data-ago="a-stores"><svg width="17" height="17" viewBox="0 0 24 24"><use href="#i-store"/></svg>Stores</button>
+              <button class="on" data-ago="a-staff"><svg width="17" height="17" viewBox="0 0 24 24"><use href="#i-people"/></svg>Staff</button>
+            </nav>
+            <div class="usr"><span class="av" style="background:var(--red);color:#fff">H</span><div><b>Head Office</b><span>admin</span></div></div>
+          </aside>
+          <main class="amain">
+            <div class="ahead">
+              <div><h2>Staff</h2><div class="sub">Console access, scoped per store</div></div>
+              <button class="abtn" style="margin-left:auto"><svg width="15" height="15" viewBox="0 0 24 24"><use href="#i-plus"/></svg>Invite staff</button>
+            </div>
+            <div class="mtable">
+              <div class="strow" style="background:var(--cream-deep);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint)"><span>Person</span><span>Store</span><span>Role</span><span></span></div>
+              <div class="strow"><span style="display:flex;align-items:center;gap:11px"><span class="av" style="background:var(--red);color:#fff">O</span><span><b style="font-size:13.5px">Owais Qadri</b><small style="display:block;color:var(--ink-faint);font-size:11.5px">owais@kooks.in</small></span></span><span>All stores</span><span><span class="rolechip rc-adm">Admin</span></span><button class="editlink">Edit</button></div>
+              <div class="strow"><span style="display:flex;align-items:center;gap:11px"><span class="av" style="background:var(--gold);color:#5C4308">R</span><span><b style="font-size:13.5px">Rameez Bhat</b><small style="display:block;color:var(--ink-faint);font-size:11.5px">manager.residency@kooks.in</small></span></span><span>Residency Road</span><span><span class="rolechip rc-stf">Store staff</span></span><button class="editlink">Edit</button></div>
+              <div class="strow"><span style="display:flex;align-items:center;gap:11px"><span class="av" style="background:var(--green);color:#fff">S</span><span><b style="font-size:13.5px">Sadaf Jan</b><small style="display:block;color:var(--ink-faint);font-size:11.5px">manager.hyderpora@kooks.in</small></span></span><span>Hyderpora</span><span><span class="rolechip rc-stf">Store staff</span></span><button class="editlink">Edit</button></div>
+              <div class="strow"><span style="display:flex;align-items:center;gap:11px"><span class="av" style="background:#5f259f;color:#fff">V</span><span><b style="font-size:13.5px">Vikram Sharma</b><small style="display:block;color:var(--ink-faint);font-size:11.5px">manager.gandhinagar@kooks.in</small></span></span><span>Gandhi Nagar</span><span><span class="rolechip rc-stf">Store staff</span></span><button class="editlink">Edit</button></div>
+            </div>
+          </main>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <svg width="22" height="22" viewBox="0 0 120 120"><use href="#mascot"/></svg>
+  Kooks design prototype · placeholder mascot &amp; line-art food tiles swap for original brand assets · iterate freely, nothing here is code-final
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ---- section tabs ----
+document.querySelectorAll('.navtab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.navtab').forEach(x=>x.classList.remove('on'));
+    document.querySelectorAll('.section').forEach(x=>x.classList.remove('on'));
+    t.classList.add('on');
+    document.getElementById(t.dataset.sec).classList.add('on');
+    window.scrollTo({top:0});
+  });
+});
+// ---- phone navigation ----
+function go(id){
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
+  const el=document.getElementById(id);
+  if(el){el.classList.add('on');el.querySelector('.scr-body')?.scrollTo(0,0);}
+  document.querySelectorAll('.chip[data-go]').forEach(c=>c.classList.toggle('on',c.dataset.go===id));
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');
+  if(g){go(g.dataset.go); if(g.dataset.toast)showToast(g.dataset.toast);}
+  const a=e.target.closest('[data-ago]');
+  if(a){
+    document.querySelectorAll('.ascr').forEach(s=>s.classList.remove('on'));
+    document.getElementById(a.dataset.ago).classList.add('on');
+    document.querySelectorAll('.chip[data-ago]').forEach(c=>c.classList.toggle('on',c.dataset.ago===a.dataset.ago));
+  }
+});
+// ---- toast ----
+let toastT;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600);
+}
+// ---- item detail: variant + qty ----
+let unit=199,qty=1;
+document.querySelectorAll('.vopt').forEach(o=>o.addEventListener('click',()=>{
+  document.querySelectorAll('.vopt').forEach(x=>x.classList.remove('on'));
+  o.classList.add('on');unit=+o.dataset.p;paint();
+}));
+document.getElementById('q-plus').addEventListener('click',()=>{qty=Math.min(9,qty+1);paint()});
+document.getElementById('q-minus').addEventListener('click',()=>{qty=Math.max(1,qty-1);paint()});
+function paint(){
+  document.getElementById('q-val').textContent=qty;
+  document.getElementById('addamt').textContent='₹'+(unit*qty);
+}
+document.getElementById('addcta').addEventListener('click',()=>showToast('Added to cart ✓'));
+// ---- mini steppers (cart) : visual only ----
+document.querySelectorAll('.mini-step').forEach(ms=>{
+  const q=ms.querySelector('.q'),[m,p]=[ms.children[0],ms.children[2]];
+  m.addEventListener('click',ev=>{ev.stopPropagation();q.textContent=Math.max(1,+q.textContent-1)});
+  p.addEventListener('click',ev=>{ev.stopPropagation();q.textContent=Math.min(9,+q.textContent+1)});
+});
+// ---- OTP boxes ----
+const otps=[...document.querySelectorAll('.otp')];
+otps.forEach((o,i)=>o.addEventListener('input',()=>{if(o.value&&otps[i+1])otps[i+1].focus()}));
+// ---- live tracking simulation ----
+const stepEls=()=>[...document.querySelectorAll('#steps .tstep')];
+let simIdx=2;
+setInterval(()=>{
+  const track=document.getElementById('s-track');
+  if(!track.classList.contains('on'))return;
+  const els=stepEls();
+  simIdx=simIdx>=els.length?2:simIdx;
+  els.forEach((el,i)=>{el.classList.toggle('done',i<simIdx);el.classList.toggle('now',i===simIdx)});
+  simIdx++;
+},3800);
+// ---- admin: advance order cards between columns ----
+document.addEventListener('click',e=>{
+  const btn=e.target.closest('.oadv');if(!btn)return;
+  const card=btn.closest('.ocard'),col=btn.closest('.kcol');
+  const cols=[...document.querySelectorAll('#kanban .kcol')];
+  const idx=cols.indexOf(col);
+  card.classList.remove('newflash');
+  if(idx<cols.length-1){
+    const next=cols[idx+1];
+    next.insertBefore(card,next.querySelector('.ocard'));
+    btn.textContent=idx===0?'Mark ready ✓':'Picked up ✓';
+    btn.classList.toggle('rdy',idx===0);
+    showToast(idx===0?'Order accepted — kitchen notified':'Order ready — customer notified');
+  }else{
+    card.style.transition='.3s';card.style.opacity='0';card.style.transform='scale(.95)';
+    setTimeout(()=>card.remove(),300);
+    showToast('Handed over ✓ Enjoy!');
+  }
+  cols.forEach(c=>c.querySelector('.cnt').textContent=c.querySelectorAll('.ocard').length);
+});
+// ---- switches ----
+document.addEventListener('click',e=>{const s=e.target.closest('.switch');if(s)s.classList.toggle('on')});
+</script>
+</body>
+</html>
