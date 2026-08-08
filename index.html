@@ -1180,14 +1180,18 @@ input{font-family:inherit}
 <div class="toast" id="toast"></div>
 
 <script>
-// ---- section tabs ----
+// ---- section tabs + deep links (#brand / #app / #admin, optional /screen) ----
+const SECS={brand:'sec-brand',app:'sec-app',admin:'sec-admin'};
+function showSection(secId){
+  document.querySelectorAll('.navtab').forEach(x=>x.classList.toggle('on',x.dataset.sec===secId));
+  document.querySelectorAll('.section').forEach(x=>x.classList.toggle('on',x.id===secId));
+  window.scrollTo({top:0});
+}
 document.querySelectorAll('.navtab').forEach(t=>{
   t.addEventListener('click',()=>{
-    document.querySelectorAll('.navtab').forEach(x=>x.classList.remove('on'));
-    document.querySelectorAll('.section').forEach(x=>x.classList.remove('on'));
-    t.classList.add('on');
-    document.getElementById(t.dataset.sec).classList.add('on');
-    window.scrollTo({top:0});
+    showSection(t.dataset.sec);
+    const key=Object.keys(SECS).find(k=>SECS[k]===t.dataset.sec);
+    history.replaceState(null,'','#'+key);
   });
 });
 // ---- phone navigation ----
@@ -1269,6 +1273,23 @@ document.addEventListener('click',e=>{
 });
 // ---- switches ----
 document.addEventListener('click',e=>{const s=e.target.closest('.switch');if(s)s.classList.toggle('on')});
+// ---- hash routing (runs last so go() exists) ----
+function applyHash(){
+  const h=decodeURIComponent(location.hash.replace('#',''));
+  if(!h)return;
+  const [sec,screen]=h.split('/');
+  if(SECS[sec])showSection(SECS[sec]);
+  if(!screen)return;
+  const el=document.getElementById(screen);
+  if(el&&el.classList.contains('scr'))go(screen);
+  else if(el&&el.classList.contains('ascr')){
+    document.querySelectorAll('.ascr').forEach(s=>s.classList.remove('on'));
+    el.classList.add('on');
+    document.querySelectorAll('.chip[data-ago]').forEach(c=>c.classList.toggle('on',c.dataset.ago===screen));
+  }
+}
+window.addEventListener('hashchange',applyHash);
+applyHash();
 </script>
 </body>
 </html>
